@@ -36,10 +36,66 @@ ruby! {
             let related_examples = self.example_groups.get(&encoded_file_path);
             let mut result: Vec<String> = vec![];
 
-            for example in related_examples.unwrap().iter(){
-                result.push(self.encoder.decode(example));
+            match related_examples {
+                Some(examples) => {
+                    for example in examples.iter(){
+                        result.push(self.encoder.decode(example));
+                    }
+                    result.join(",")
+                },
+                None => String::new()
+            }
+        }
+
+        def affected_examples_for(&mut self, files: String) -> String{
+            let mut result: Vec<String> = vec![];
+            let files_list: Vec<&str> = files.split(",").collect();
+
+            for file in files_list.iter(){
+                let encoded_file_path = self.encoder.encode(&file);
+                let related_examples = self.example_groups.get(&encoded_file_path);
+
+                match related_examples {
+                    Some(examples) => {
+                        for example in examples.iter(){
+                            let decoded_example = self.encoder.decode(example);
+                            if !result.contains(&decoded_example){
+                                result.push(decoded_example);
+                            }
+                        }
+                    },
+                    None => ()
+                }
             }
             result.join(",")
+        }
+
+        def examples(&mut self) -> String{
+            let mut result: Vec<String> = vec![];
+            for examples_list in self.example_groups.values(){
+                for example in examples_list.iter(){
+                    let decoded_example = self.encoder.decode(&example.to_string());
+                    if !result.contains(&decoded_example){
+                        result.push(decoded_example);
+                    }
+                }
+            }
+            result.join(",")
+        }
+
+        def example_groups(&mut self) -> String{
+            let mut result: Vec<String> = vec![];
+            for (file, examples) in self.example_groups.iter(){
+                let decoded_file = self.encoder.decode(&file.to_string());
+                let mut line: Vec<String> = vec![];
+                line.push(decoded_file);
+                for example in examples.iter(){
+                    let decoded_example = self.encoder.decode(&example.to_string());
+                    line.push(decoded_example);
+                }
+                result.push(line.join(","));
+            }
+            result.join(";")
         }
 
         def size(&self) -> usize{
@@ -53,6 +109,10 @@ ruby! {
                 result.push(decoded_key);
             }
             result.join(",")
+        }
+
+        def clear(&mut self){
+            self.example_groups.clear();
         }
 
         def print_example_groups(&self){
