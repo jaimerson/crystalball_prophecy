@@ -35,6 +35,14 @@ impl PathEncoder {
         result.join("/")
     }
 
+    pub fn set_stored_values(&mut self, values: &str) {
+        self.stored_values.clear();
+
+        for value in values.split(",") {
+            self.stored_values.push(value.to_string());
+        }
+    }
+
     // If the word is already stored, returns string representation of its index. If not, stores it and returns string index.
     fn encode_word(&mut self, word: String) -> String {
         let value = match self.stored_values.iter().position(|x| x == &word) {

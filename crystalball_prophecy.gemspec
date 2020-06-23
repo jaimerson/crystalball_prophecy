@@ -1,10 +1,10 @@
-# encoding: utf-8
+# frozen_string_literal: true
 
 Gem::Specification.new do |s|
   s.name         = 'crystalball_prophecy'
   s.version      = '0.1.0'
   s.authors      = ['Jaimerson Araújo <jaimersonaraujo@gmail.com>']
-  s.summary      = "A crystalball addon to read and write file dependencies more efficiently"
+  s.summary      = 'A crystalball addon to read and write file dependencies more efficiently'
   s.files        = Dir['{lib/**/*,[A-Z]*}']
 
   s.platform     = Gem::Platform::RUBY

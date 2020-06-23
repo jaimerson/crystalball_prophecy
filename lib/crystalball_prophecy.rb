@@ -9,3 +9,4 @@ rescue LoadError
 end
 
 require 'extensions/crystalball_prophecy_data_source'
+require 'crystalball_prophecy/crystalball_prophecy_storage'

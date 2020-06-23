@@ -47,6 +47,22 @@ ruby! {
             }
         }
 
+        // Assumes both example and related_files are already encoded
+        def set_encoded(&mut self, example: String, related_files: String){
+            let files: Vec<&str> = related_files.split(",").collect();
+            let mut result: Vec<String> = vec![];
+
+            for file in files.iter(){
+                result.push(file.to_string())
+            }
+
+            self.example_groups.insert(example, result);
+        }
+
+        def set_dictionary(&mut self, values_to_store: String){
+            self.encoder.set_stored_values(&values_to_store);
+        }
+
         def affected_examples_for(&mut self, files: String) -> String{
             let mut result: Vec<String> = vec![];
             let files_list: Vec<&str> = files.split(",").collect();
